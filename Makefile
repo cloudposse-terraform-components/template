@@ -1,21 +1,8 @@
-export DOCKER_ORG ?= cloudposse
-export DOCKER_IMAGE ?= $(DOCKER_ORG)/component
-export DOCKER_TAG ?= latest
-export DOCKER_IMAGE_NAME ?= $(DOCKER_IMAGE):$(DOCKER_TAG)
-export DOCKER_BUILD_FLAGS =
-export README_DEPS ?= docs/targets.md docs/terraform.md
+# TODO, figure out remote template
+# export CLOUDPOSSE_TERRAFORM_COMPONENTS_PATH ?= "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/main"
+# export README_TEMPLATE_FILE ?= $(CLOUDPOSSE_TERRAFORM_COMPONENTS_PATH)/templates/README.md.gotmpl
+export README_DEPS ?= src/README.md
+
 -include $(shell curl -sSL -o .build-harness "https://cloudposse.tools/build-harness"; echo .build-harness)
 
-all: init deps build install run
-
-deps:
-	@exit 0
-
-build:
-	@make --no-print-directory docker:build
-
-push:
-	docker push $(DOCKER_IMAGE)
-
-run:
-	docker run -it ${DOCKER_IMAGE_NAME} sh
+all: init readme
