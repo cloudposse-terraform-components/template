@@ -1,4 +1,3 @@
 # Note, this can be removed later. Currently keeps PR's easier to review
-docs linguist-documentation=true
 **/*.md linguist-documentation=true
-**/*.tf linguist-generated=true
+**/README.md linguist-generated=true
