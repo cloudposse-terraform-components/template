@@ -58,10 +58,6 @@ aws-assumed-role/
 # deps
 Brewfile.lock.json
 
-# custom docker files
-Dockerfile.mine
-Dockerfile.custom
-
 # custom direnv and .env
 .env*
 
