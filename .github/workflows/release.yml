@@ -1,0 +1,15 @@
+name: 🚀 Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate SemVer versions
+        uses: cloudposse/github-action-major-release-tagger@v1
+
+      - name: Publish release branches
+        uses: cloudposse/github-action-release-branch-manager@v1

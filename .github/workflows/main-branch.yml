@@ -1,4 +1,4 @@
-name: 🚀 Auto Release
+name: 🚀 Main Branch
 
 on:
   push:
@@ -9,7 +9,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: cloudposse/github-action-auto-release@v1
+      - name: Draft new release
+        uses: cloudposse/github-action-auto-release@v1
         with:
           prerelease: false
           publish: true
