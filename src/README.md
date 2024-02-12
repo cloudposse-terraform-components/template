@@ -1,6 +1,6 @@
 # Component: `foo`
 
-This component is responsible for foo. test
+This component is responsible for foo.
 
 ## Usage
 
