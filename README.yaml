@@ -8,7 +8,6 @@ description: |-
   Description of this component
 
 include:
-  - "docs/targets.md"
   - "src/README.md"
 
 tags:
@@ -34,7 +33,7 @@ license: "APACHE2"
 badges:
   - name: "Latest Release"
     image: "https://img.shields.io/github/release/cloudposse/terraform-aws-components.svg"
-    url: "https://github.com/cloudposse/terraform-aws-components/releases/latest"
+    url: "https://github.com/cloudposse-terraform-components/template/releases/latest"
   - name: "Slack Community"
     image: "https://slack.cloudposse.com/badge.svg"
     url: "https://slack.cloudposse.com"
