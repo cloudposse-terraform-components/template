@@ -1,13 +1,16 @@
-# TODO
 docs:
   - docs/**
-  - README.md
+  - README.*
 
 automation:
+  - .gitattributes
   - .github/**
-  - .spacelift/**
-  - Makefile
+  - .gitignore
   - .pre-commit-config.yaml
+  - .tflint.hcl
+  - Makefile
+  - _typos.toml
 
 configuration:
-  - stacks/**
+  - src/**
+  - test/**

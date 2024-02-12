@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 # template <a href="https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/template&utm_content="><img align="right" src="https://cloudposse.com/logo-300x69.svg" width="150" /></a>
-<a href="https://github.com/cloudposse/terraform-aws-components/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/terraform-aws-components.svg" alt="Latest Release"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/badge.svg" alt="Slack Community"/></a>
+<a href="https://github.com/cloudposse-terraform-components/template/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/terraform-aws-components.svg" alt="Latest Release"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/badge.svg" alt="Slack Community"/></a>
 <!-- markdownlint-restore -->
 
 <!--
@@ -47,17 +47,6 @@ Description of this component
 
 
 
-<!-- markdownlint-disable -->
-## Makefile Targets
-```text
-Available targets:
-
-  help                                Help screen
-  help/all                            Display help for all targets
-  help/short                          This help short screen
-
-```
-<!-- markdownlint-restore -->
 # Component: `foo`
 
 This component is responsible for foo.
