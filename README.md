@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 # template <a href="https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/template&utm_content="><img align="right" src="https://cloudposse.com/logo-300x69.svg" width="150" /></a>
-<a href="https://github.com/cloudposse-terraform-components/template/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/terraform-aws-components.svg" alt="Latest Release"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/badge.svg" alt="Slack Community"/></a>
+<a href="https://github.com/cloudposse-terraform-components/template/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/terraform-aws-components.svg?style=for-the-badge" alt="Latest Release"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/for-the-badge.svg" alt="Slack Community"/></a>
 <!-- markdownlint-restore -->
 
 <!--
@@ -214,6 +214,8 @@ Ensure that your team succeeds by using our proven process and turnkey blueprint
 <summary>Preamble to the Apache License, Version 2.0</summary>
 <br/>
 <br/>
+
+
 
 ```text
 Licensed to the Apache Software Foundation (ASF) under one
