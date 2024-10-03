@@ -12,5 +12,5 @@ permissions:
 
 jobs:
   component:
-    uses: cloudposse/.github/.github/workflows/shared-release-branches.yml@main
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-release-branches.yml@main
     secrets: inherit
