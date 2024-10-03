@@ -1,15 +1,16 @@
-name: 🚀 Release
-
+---
+name: release
 on:
   release:
-    types: [published]
+    types:
+      - published
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Generate SemVer versions
-        uses: cloudposse/github-action-major-release-tagger@v1
-
-      - name: Publish release branches
-        uses: cloudposse/github-action-release-branch-manager@v1
+  component:
+    uses: cloudposse/.github/.github/workflows/shared-release-branches.yml@main
+    secrets: inherit
