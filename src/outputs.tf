@@ -1,4 +1,4 @@
 output "mock" {
-  description = "Mock output example for the Cloud Posse Terraform component template test"
+  description = "Mock output example for the Cloud Posse Terraform component template test2"
   value       = local.enabled ? "hello ${basename(abspath(path.module))}" : ""
 }
