@@ -20,6 +20,6 @@ on:
 permissions: {}
 
 jobs:
-  terraform-module:
+  component:
     uses: cloudposse-terraform-components/.github/.github/workflows/shared-terraform-component.yml@main
     secrets: inherit
