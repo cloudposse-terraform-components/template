@@ -116,6 +116,17 @@ No resources.
 |------|-------------|
 | <a name="output_mock"></a> [mock](#output\_mock) | Mock output example for the Cloud Posse Terraform component template |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- markdownlint-disable -->
+## Makefile Targets
+```text
+Available targets:
+
+  help                                Help screen
+  help/all                            Display help for all targets
+  help/short                          This help short screen
+
+```
+<!-- markdownlint-restore -->
 
 
 ## Related Projects
