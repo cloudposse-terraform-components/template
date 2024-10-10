@@ -1,4 +1,4 @@
-name: "foo"
+name: "template"
 
 # Canonical GitHub repo
 github_repo: "cloudposse-terraform-components/template"
