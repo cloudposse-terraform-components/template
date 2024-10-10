@@ -2,8 +2,6 @@
 
 all: init readme
 
-readme: readme/build
-
 test::
 	@echo "🚀 Starting tests..."
 	./test/run.sh

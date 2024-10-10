@@ -17,7 +17,10 @@ on:
       - 'test/**'
       - 'README.md'
 
-permissions: {}
+permissions:
+  contents: write
+  id-token: write
+  pull-requests: write
 
 jobs:
   component:

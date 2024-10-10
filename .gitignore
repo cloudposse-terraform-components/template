@@ -58,6 +58,10 @@ aws-assumed-role/
 # deps
 Brewfile.lock.json
 
+# docs targets
+docs/terraform.md
+docs/targets.md
+
 # custom direnv and .env
 .env*
 

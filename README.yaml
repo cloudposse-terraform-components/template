@@ -7,8 +7,21 @@ github_repo: "cloudposse-terraform-components/template"
 description: |-
   Description of this component
 
+usage: |-
+  **Stack Level**: Regional
+  
+  Here's an example snippet for how to use this component.
+  
+  ```yaml
+  components:
+    terraform:
+      foo:
+        vars:
+          enabled: true
+  ```
+
 include:
-  - "src/README.md"
+  - "docs/terraform.md"
 
 tags:
   - terraform
