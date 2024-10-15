@@ -12,10 +12,7 @@ on:
       - release/v*
     paths-ignore:
       - '.github/**'
-      - 'docs/**'
-      - 'examples/**'
       - 'test/**'
-      - 'README.md'
 
 permissions:
   contents: write
