@@ -111,7 +111,7 @@ No resources.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_mock"></a> [mock](#output\_mock) | Mock output example for the Cloud Posse Terraform component template |
+| <a name="output_mock"></a> [mock](#output\_mock) | Mock output example for the Cloud Posse Terraform component template 42 |
 <!-- markdownlint-restore -->
 
 
