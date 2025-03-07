@@ -1,11 +1,9 @@
 package test
 
 import (
-	// "strings"
 	"testing"
 
 	helper "github.com/cloudposse/test-helpers/pkg/atmos/component-helper"
-	// "github.com/gruntwork-io/terratest/modules/random"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -34,23 +32,5 @@ func (s *ComponentSuite) TestEnabledFlag() {
 
 func TestRunSuite(t *testing.T) {
 	suite := new(ComponentSuite)
-
-	// TODO: Add dependency for the VPC component
-	// suite.AddDependency(t, "vpc", "default-test", nil)
-
-	// TODO: Add dependency for the DNS component
-	// With unique inputs to avoid conflicts
-
-	// subdomain := strings.ToLower(random.UniqueId())
-	// inputs := map[string]interface{}{
-	// 	"zone_config": []map[string]interface{}{
-	// 		{
-	// 			"subdomain": subdomain,
-	// 			"zone_name": "components.cptest.test-automation.app",
-	// 		},
-	// 	},
-	// }
-	// suite.AddDependency(t, "dns-delegated", "default-test", &inputs)
-
 	helper.Run(t, suite)
 }
