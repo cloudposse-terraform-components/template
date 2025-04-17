@@ -8,10 +8,10 @@ description: |-
   Description of this component
 
 usage: |-
-  **Stack Level**: Regional or Test47
+  **Stack Level**: Regional or Test
 
   Here's an example snippet for how to use this component.
-  
+
   ```yaml
   components:
     terraform:
