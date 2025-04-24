@@ -482,4 +482,4 @@ queue_rules:
     merge_method: squash
     update_method: rebase
     name: Test
-    branch_protection_injection_mode: none
+    branch_protection_injection_mode: queue
