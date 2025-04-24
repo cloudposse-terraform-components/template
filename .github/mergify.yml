@@ -483,3 +483,7 @@ queue_rules:
     update_method: rebase
     name: Test
     branch_protection_injection_mode: queue
+    allow_inplace_checks: false
+    merge_conditions:
+      - and:
+          - check-success = Mergify Merge Protections
