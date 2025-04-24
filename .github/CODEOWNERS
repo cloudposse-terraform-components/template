@@ -5,3 +5,6 @@
 
 # These owners will be the default owners for everything
 * @cloudposse-terraform-components/engineering @cloudposse-terraform-components/admins
+
+# Protect .github directory to only admins
+.github/* @cloudposse-terraform-components/admins
