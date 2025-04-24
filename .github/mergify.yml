@@ -1,265 +1,218 @@
-# extends: .github
-
-
-# These are YAML anchor definitions to avoid repetition and make the file more readable
 shared:
-  # Automated pull requests from bot users
-  is_a_bot: &is_a_bot
+  is_a_bot: &a4
     - or:
-      - "author=cloudpossebot"
-      - "author=github-actions[bot]"
-      - "author=dependabot[bot]"
-      - "author=renovate[bot]"
-      - "author=cloudposse-releaser[bot]"
-
-  # Not a bot user
-  not_a_bot: &not_a_bot
+        - author=cloudpossebot
+        - author=github-actions[bot]
+        - author=dependabot[bot]
+        - author=renovate[bot]
+        - author=cloudposse-releaser[bot]
+  not_a_bot: &a1
     - and:
-      - "-author=cloudpossebot"
-      - "-author=github-actions[bot]"
-      - "-author=dependabot[bot]"
-      - "-author=renovate[bot]"
-      - "author=cloudposse-releaser[bot]"
-      
-  # Contribution is from an external contributor, not part of the organization
-  is_external_contributor: &is_external_contributor
+        - -author=cloudpossebot
+        - -author=github-actions[bot]
+        - -author=dependabot[bot]
+        - -author=renovate[bot]
+        - author=cloudposse-releaser[bot]
+  is_external_contributor: &a13
     - and:
-      - "-author=@engineering"
-      - "-author=@contributors"
-      - "-author=@admins"
-      - "-author=@bots"
-      - "-author=@approvers"
-      - "-author=@security"
-      - and: *not_a_bot
-
-  # Default branches
-  is_default_branch: &is_default_branch
+        - -author=@engineering
+        - -author=@contributors
+        - -author=@admins
+        - -author=@bots
+        - -author=@approvers
+        - -author=@security
+        - and: *a1
+  is_default_branch: &a8
     - or:
-      - "base=main"
-      - "base=master"
-
-  # Release branches
-  is_release_branch: &is_release_branch
+        - base=main
+        - base=master
+  is_release_branch:
     - and:
-      - "base~=^release/v\\d{1,2}$"
-
-  # Not a work in progress
-  not_wip: &not_wip
+        - base~=^release/v\d{1,2}$
+  not_wip: &a11
     - and:
-      - "-title~=^(wip|WIP)"
-      - "-label~=(WIP|wip|do-not-merge|do not merge|triage|stale|feedback|help needed)"
-      - '-draft'
-
-  # Label indicates some action is needed
-  needs_attention: &needs_attention
+        - -title~=^(wip|WIP)
+        - -label~=(WIP|wip|do-not-merge|do not merge|triage|stale|feedback|help
+          needed)
+        - -draft
+  needs_attention: &a3
     - and:
-      - "label~=(triage|stale|feedback|help needed)"
-
-  # Do not merge this PR
-  do_not_merge: &do_not_merge
+        - label~=(triage|stale|feedback|help needed)
+  do_not_merge: &a2
     - or:
-      - "label~=(do-not-merge|do not merge)"
-      - "title~=(do-not-merge|do not merge)"
-
-  # Is a work in progress
-  is_wip: &is_wip
+        - label~=(do-not-merge|do not merge)
+        - title~=(do-not-merge|do not merge)
+  is_wip: &a9
     - or:
-      - "title~=^(wip|WIP)"
-      - "label~=(WIP|wip)"
-      - and: *do_not_merge
-      - and: *needs_attention
-      - 'draft'      
-
-  # Not in conflict
-  not_in_conflict: &not_in_conflict
+        - title~=^(wip|WIP)
+        - label~=(WIP|wip)
+        - and: *a2
+        - and: *a3
+        - draft
+  not_in_conflict: &a12
     - and:
-      - "-conflict"
-      - "-label~=(conflict)"
-
-  # Properly titled and described
-  pr_has_metadata: &pr_has_metadata
+        - -conflict
+        - -label~=(conflict)
+  pr_has_metadata:
     - and:
-      - "title~=(^[0-9A-Za-z]+)"
-      - body~=[0-9A-Za-z]{3,}\\s+[0-9A-Za-z]{3,}\\s+[0-9A-Za-z]{3,}
-      - -body~=(Describe high-level what changed)
-
-  # Has reviews and no changes requested
-  is_approved: &is_approved
+        - title~=(^[0-9A-Za-z]+)
+        - body~=[0-9A-Za-z]{3,}\\s+[0-9A-Za-z]{3,}\\s+[0-9A-Za-z]{3,}
+        - -body~=(Describe high-level what changed)
+  is_approved:
     - and:
-      - '#approved-reviews-by>=1'
-      - '#changes-requested-reviews-by=0'
-      - "#review-threads-unresolved=0"
-      - "#commented-reviews-by=0"
-
-  # Checks are passing
-  checks_are_passing: &checks_are_passing
+        - "#approved-reviews-by>=1"
+        - "#changes-requested-reviews-by=0"
+        - "#review-threads-unresolved=0"
+        - "#commented-reviews-by=0"
+  checks_are_passing:
     - and:
-      - "#check-pending=0"
-      - "#status-failure=0"
-
-  # Only for terraform files
-  require_terraform_checks_are_passing: &require_terraform_checks_are_passing
+        - "#check-pending=0"
+        - "#status-failure=0"
+  require_terraform_checks_are_passing: &a15
     - or:
-      - "-files~=\\.tf$"
-      - and:
-        - "check-success=test/bats"
-        - "check-success=test/terratest"
-        - -status-failure~=^(terratest|terraform)$
-
-  # CODEOWNERS check did not run or is not passing
-  require_codeowners_checks_are_passing: &require_codeowners_checks_are_passing
+        - -files~=\.tf$
+        - and:
+            - check-success=test/bats
+            - check-success=test/terratest
+            - -status-failure~=^(terratest|terraform)$
+  require_codeowners_checks_are_passing:
     - or:
-      - "-files=CODEOWNERS"
-      - and:
-        - "check-success=validate-codeowners"
-
-  # Has changes to terraform code
-  is_terraform: &is_terraform
+        - -files=CODEOWNERS
+        - and:
+            - check-success=validate-codeowners
+  is_terraform: &a7
     - and:
-      - "files~=\\.tf$"
-
-  # It's not closed or merged
-  is_open: &is_open
+        - files~=\.tf$
+  is_open: &a5
     - and:
-      - -merged
-      - -closed
-
-  # Was recently updated one minute ago
-  is_recent_commit: &is_recent_commit
+        - -merged
+        - -closed
+  is_recent_commit: &a14
     - and:
-      - commits[*].date_committer > 1 minutes ago
-
-  # README.md is updated together with README.yaml
-  readme_updated: &readme_updated
+        - commits[*].date_committer > 1 minutes ago
+  readme_updated:
     - or:
-      - and:
-        - -files=README.md
-        - -files=README.yaml
-      - and:
-        - files=README.md
-        - files=README.yaml
-
-  # Needs Cloud Posse review
-  needs_cloudposse: &needs_cloudposse
+        - and:
+            - -files=README.md
+            - -files=README.yaml
+        - and:
+            - files=README.md
+            - files=README.yaml
+  needs_cloudposse: &a16
     - or:
-      - "files~=(mergify|settings|dependabot|renovate|CODEOWNERS|\\.github|Makefile|Dockerfile)"
-      - "label~=(cloudposse)"
-
-  # Has no changes
-  has_no_changes: &has_no_changes
+        - files~=(mergify|settings|dependabot|renovate|CODEOWNERS|\.github|Makefile|Dockerfile)
+        - label~=(cloudposse)
+  has_no_changes: &a10
     - and:
-      - "#files=0"
-
-  # Needs re-run
-  needs_rerun: &needs_rerun
+        - "#files=0"
+  needs_rerun: &a6
     - and:
-      - "label~=needs-re-run"
-
-# All the rules for the Pull Request
+        - label~=needs-re-run
 pull_request_rules:
-  - name: "label automated pull requests"
+  - name: label automated pull requests
     conditions:
-      - and: *is_a_bot
-      - and: *is_open
+      - and: *a4
+      - and: *a5
     actions:
       label:
         add:
-          - "auto-update"
-
-  - name: "label automated pull requests that update readme"
+          - auto-update
+  - name: label automated pull requests that update readme
     conditions:
-      - and: *is_open
-      - and: *is_a_bot
-      - "files=README.md"
+      - and: *a5
+      - and: *a4
+      - files=README.md
     actions:
       label:
         toggle:
-          - "readme"
-
-  - name: "re run actions by removing the label autobots-re-run"
+          - readme
+  - name: re run actions by removing the label autobots-re-run
     conditions:
-      - and: *is_open
-      - and: *needs_rerun
+      - and: *a5
+      - and: *a6
     actions:
       label:
         remove:
-          - "needs-re-run"
-
-  - name: "run terratest on automated pull requests that update terraform files"
+          - needs-re-run
+  - name: run terratest on automated pull requests that update terraform files
     conditions:
-      - and: *is_open
-      - and: *is_a_bot
-      - and: *is_terraform
+      - and: *a5
+      - and: *a4
+      - and: *a7
     actions:
       comment:
-        message: "/terratest"
-
-  - name: "approve automated PRs that only update the markdown files, images or videos"
+        message: /terratest
+  - name: approve automated PRs that only update the markdown files, images or videos
     conditions:
-      - and: *is_open
-      - and: *is_default_branch
-      - and: *is_a_bot
-      - "head~=auto-update/.*"
-      - "files~=\\.(md|gif|png|jpg|mp4)$"
+      - and: *a5
+      - and: *a8
+      - and: *a4
+      - head~=auto-update/.*
+      - files~=\.(md|gif|png|jpg|mp4)$
     actions:
       review:
         type: APPROVE
-
-  - name: "merge automated PRs that only update the markdown files, images or videos"
+  - name: merge automated PRs that only update the markdown files, images or videos
     conditions:
-      - and: *is_open
-      - and: *is_default_branch
-      - and: *is_a_bot
+      - and: *a5
+      - and: *a8
+      - and: *a4
       - "#check-pending=0"
-      - "head~=auto-update/.*"
-      - "files~=\\.(md|gif|png|jpg|mp4)$"
+      - head~=auto-update/.*
+      - files~=\.(md|gif|png|jpg|mp4)$
     actions:
       merge:
-        method: "squash"
-
-  - name: "delete the head branch after merge"
+        method: squash
+  - name: delete the head branch after merge
     conditions:
-      - "merged"
+      - merged
     actions:
       delete_head_branch: {}
-
-  - name: "ask to resolve conflict"
+  - name: ask to resolve conflict
     conditions:
-      - and: *is_open
-      - "conflict"
+      - and: *a5
+      - conflict
     actions:
       comment:
-        message: "💥 This pull request now has conflicts. Could you fix it @{{author}}? 🙏"
+        message: 💥 This pull request now has conflicts. Could you fix it @{{author}}?
+          🙏
       label:
         toggle:
           - conflict
-
-  - name: "ask to rebuild readme"
+  - name: ask to rebuild readme
     conditions:
-      - and: *is_default_branch
-      - and: *is_open
+      - and: *a8
+      - and: *a5
       - files=README.yaml
       - -files=README.md
     actions:
       comment:
-        message: |
+        message: >
           > [!IMPORTANT]
+
           > `README.md` is out of date.
+
           >
 
-          Rebuild the `README.md` by running `make readme` and commit the changes.
+
+          Rebuild the `README.md` by running `make readme` and commit the
+          changes.
+
 
           ```shell
+
           make init
+
           make readme
+
           ```
 
-          Could you fix it @{{author}}? 🙏
 
-  - name: "ask for title"
+          Could you fix it @{{author}}? 🙏
+  - name: ask for title
     conditions:
-      - and: *is_default_branch
-      - and: *is_open
+      - and: *a8
+      - and: *a5
       - -title~=^[0-9A-Za-z]+
     actions:
       comment:
@@ -268,55 +221,54 @@ pull_request_rules:
           > #### Title is necessary and should not be empty.
           >
           > Kindly provide a meaningful title for this Pull Request.
-
-  - name: "ask for description"
+  - name: ask for description
     conditions:
-      - and: *is_default_branch
-      - and: *is_open
+      - and: *a8
+      - and: *a5
       - -body~=[0-9A-Za-z]{3,}\\s+[0-9A-Za-z]{3,}\\s+[0-9A-Za-z]{3,}
       - body~=(Describe high-level what changed)
     actions:
       comment:
-        message: |
+        message: >
           > [!IMPORTANT]
-          > #### Description is necessary and should not be empty.
-          >
-          > Kindly provide details with **what** was changed, **why** it was changed.
 
-  - name: "remove outdated reviews"
+          > #### Description is necessary and should not be empty.
+
+          >
+
+          > Kindly provide details with **what** was changed, **why** it was
+          changed.
+  - name: remove outdated reviews
     conditions:
-      - and: *is_open
-      - and: *is_default_branch
+      - and: *a5
+      - and: *a8
     actions:
       dismiss_reviews:
         changes_requested: true
         approved: true
-        message: "This Pull Request was updated, so we're dismissing all reviews."
-
-  - name: "remove triage label if approved"
+        message: This Pull Request was updated, so we're dismissing all reviews.
+  - name: remove triage label if approved
     conditions:
-      - and: *is_open
-      - '#approved-reviews-by>=1'
+      - and: *a5
+      - "#approved-reviews-by>=1"
     actions:
       label:
         remove:
           - triage
-
   - name: close automated PRs with persistent merge conflicts quickly
     conditions:
-      - and: *is_open
-      - and: *is_a_bot
-      - "conflict"
+      - and: *a5
+      - and: *a4
+      - conflict
       - commits[*].date_committer < 1 days ago
     actions:
       close:
         message: |
           This automated PR was closed due to merge conflicts.
-
   - name: close stale PRs with merge conflicts
     conditions:
-      - and: *is_open
-      - "conflict"
+      - and: *a5
+      - conflict
       - commits[*].date_committer < 30 days ago
       - updated-at < 7 days ago
     actions:
@@ -324,23 +276,22 @@ pull_request_rules:
         message: |
           This PR was closed due to inactivity and merge conflicts. 😭
           Please resolve the conflicts and reopen if necessary.
-
   - name: close stale pull request after 90 days
     conditions:
-      - and: *is_open
-      - and: *is_default_branch
+      - and: *a5
+      - and: *a8
       - commits[*].date_committer < 90 days ago
       - updated-at < 3 days ago
       - label~=(stale)
     actions:
       close:
-        message: |
-          🚪 We're going close this pull request as it is now stale. Feel free to reopen it if you think it's a mistake.
-
+        message: >
+          🚪 We're going close this pull request as it is now stale. Feel free
+          to reopen it if you think it's a mistake.
   - name: label stale pull request after 30 days
     conditions:
-      - and: *is_open
-      - and: *is_default_branch
+      - and: *a5
+      - and: *a8
       - commits[*].date_committer < 30 days ago
       - updated-at < 7 days ago
       - -label~=(stale|triage)
@@ -349,49 +300,48 @@ pull_request_rules:
         toggle:
           - stale
       comment:
-        message: |
-          Heads up! This pull request looks stale. It will be closed soon, if there are no new commits. ⏳
-
+        message: >
+          Heads up! This pull request looks stale. It will be closed soon, if
+          there are no new commits. ⏳
   - name: close pull request waiting on feedback for 1 month
     conditions:
-      - and: *is_open
-      - and: *is_default_branch
-      - "label~=(stale)"
+      - and: *a5
+      - and: *a8
+      - label~=(stale)
       - or:
-        - "label~=(feedback)"
-        - '#commented-reviews-by > 0'
-        - '#changes-requested-reviews-by > 0'
+          - label~=(feedback)
+          - "#commented-reviews-by > 0"
+          - "#changes-requested-reviews-by > 0"
       - updated-at < 30 days ago
     actions:
       close:
         message: |
           📬 We haven't heard back from you, so we're closing this pull request.
           Feel free to reopen it if you think it's a mistake.
-
   - name: close pull request marked as invalid, duplicate or won't fix
     conditions:
-      - and: *is_open
-      - and: *is_default_branch
-      - "label~=(duplicate|invalid|wontfix)"
+      - and: *a5
+      - and: *a8
+      - label~=(duplicate|invalid|wontfix)
     actions:
       close:
         message: |
           ⚰️ This pull request is no longer applicable.
           Feel free to reopen it if you think it's a mistake.
-
   - name: close pull request that is a work in progress and in active for 1 month
     conditions:
-      - and: *is_open
-      - and: *is_default_branch
-      - and: *is_wip
+      - and: *a5
+      - and: *a8
+      - and: *a9
       - commits[*].date_committer < 90 days ago
       - updated-at < 30 days ago
     actions:
       close:
-        message: |
-          This pull request was marked as a work in progress and looks abandoned.
-          Feel free to reopen it if you think it's a mistake.
+        message: >
+          This pull request was marked as a work in progress and looks
+          abandoned.
 
+          Feel free to reopen it if you think it's a mistake.
   - name: remove certain labels on close
     conditions:
       - closed
@@ -399,30 +349,32 @@ pull_request_rules:
       label:
         remove:
           - triage
-
-  - name: "close Pull Requests without files changed"
+  - name: close Pull Requests without files changed
     conditions:
-      - and: *is_open
-      - and: *has_no_changes
+      - and: *a5
+      - and: *a10
     actions:
       label:
         add:
-          - "no-changes"
+          - no-changes
       close:
-        message: |
-          This pull request was automatically closed as it no longer contains any changes. 
-          
-          This typically happens when another merged pull request has already included this request's 
-          proposed modifications into the default branch.
+        message: >
+          This pull request was automatically closed as it no longer contains
+          any changes. 
 
+
+          This typically happens when another merged pull request has already
+          included this request's 
+
+          proposed modifications into the default branch.
   - name: welcome new contributors
     conditions:
-      - and: *is_open
-      - and: *not_wip
-      - and: *not_a_bot
-      - and: *not_in_conflict
-      - and: *is_external_contributor
-      - and: *is_default_branch
+      - and: *a5
+      - and: *a11
+      - and: *a1
+      - and: *a12
+      - and: *a13
+      - and: *a8
       - updated-at < 5 minutes ago
     actions:
       comment:
@@ -436,76 +388,76 @@ pull_request_rules:
           > [!TIP]
           > #### Need help or want to ask for a PR review to be expedited?
           > Join us on [Slack](https://slack.cloudposse.com) in the `#pr-reviews` channel.
-
   - name: add triage label for new pull requests
     conditions:
-      - and: *is_open
-      - and: *not_a_bot
-      - '#label=0'
-      # When the PR is approved, the triage label is removed. Do not add it back
-      - '#approved-reviews-by=0'
+      - and: *a5
+      - and: *a1
+      - "#label=0"
+      - "#approved-reviews-by=0"
       - or:
-        - created-at > 5 minutes ago
-        - commits[*].date_committer > 5 minutes ago
-        - updated-at > 7 days ago
+          - created-at > 5 minutes ago
+          - commits[*].date_committer > 5 minutes ago
+          - updated-at > 7 days ago
     actions:
       label:
         add:
           - triage
-
   - name: Add needs-test label on new commits
     conditions:
-      - and: *is_open
-      - and: *is_default_branch
-      - and: *is_terraform
-      - and: *is_recent_commit
+      - and: *a5
+      - and: *a8
+      - and: *a7
+      - and: *a14
       - -label=~needs-test
     actions:
       label:
-        add: ["needs-test"]
-
+        add:
+          - needs-test
   - name: Remove needs-test label when required tests pass
     conditions:
-      - and: *is_open
-      - and: *is_default_branch
-      - and: *require_terraform_checks_are_passing
+      - and: *a5
+      - and: *a8
+      - and: *a15
     actions:
       label:
-        remove: ["needs-test"]
-
+        remove:
+          - needs-test
   - name: add "WIP" label when the title contains "WIP"
     conditions:
-      - and: *is_open
+      - and: *a5
       - title~=WIP
     actions:
       label:
         toggle:
           - wip
-
   - name: add "needs-cloudposse" label when restrictions apply to this PR
     conditions:
-      - and: *is_open
-      - and: *needs_cloudposse
+      - and: *a5
+      - and: *a16
     actions:
       label:
         toggle:
           - needs-cloudposse
       comment:
-        message: |
+        message: >
           > [!IMPORTANT]
-          > #### Cloud Posse Engineering Team Review Required
-          > This pull request modifies files that require Cloud Posse's review. Please be patient, and a core maintainer will review your changes.
-          >
-          > To expedite this process, reach out to us on [Slack](https://slack.cloudposse.com) in the `#pr-reviews` channel.
 
+          > #### Cloud Posse Engineering Team Review Required
+
+          > This pull request modifies files that require Cloud Posse's review.
+          Please be patient, and a core maintainer will review your changes.
+
+          >
+
+          > To expedite this process, reach out to us on
+          [Slack](https://slack.cloudposse.com) in the `#pr-reviews` channel.
   - name: rebase pull request when it's more than 10 commits behind main
     conditions:
-      - and: *is_open
-      - and: *is_default_branch
+      - and: *a5
+      - and: *a8
       - "#commits-behind>=10"
     actions:
       rebase:
-
   - name: rebase pull requests one time when labeled with `rebase`
     conditions:
       - label=rebase
@@ -514,33 +466,6 @@ pull_request_rules:
       label:
         remove:
           - rebase
-
-  #- name: mergeable
-  #  conditions:
-  #    - and: *is_open
-  #    - and: *is_default_branch
-  #  actions:
-  #    post_check:
-  #      success_conditions:
-  #        - and:
-  #          - and: *not_wip
-  #          - and: *pr_has_metadata
-  #          - and: *readme_updated
-  #          - and: *is_approved
-  #          - and: *checks_are_passing
-  #          - and: *require_terraform_checks_are_passing
-  #          - and: *require_codeowners_checks_are_passing
-  #      title: |
-  #        {% if check_status == "success" %}
-  #        This PR is ready to be merged
-  #        {% else %}
-  #        This PR is not ready to be merged
-  #        {% endif %}
-  #      summary: |
-  #        {% if check_status == "failure" %}
-  #        Your pull request needs to be updated before it can be merged.
-  #        {% endif %}
-
 merge_protections:
   - name: Require terratest
     description: This rule require terratest status
@@ -549,7 +474,6 @@ merge_protections:
       - base = main
     success_conditions:
       - check-success = test/terratest
-
 queue_rules:
   - batch_size: 10
     batch_max_wait_time: 5 m
@@ -558,3 +482,4 @@ queue_rules:
     merge_method: squash
     update_method: rebase
     name: Test
+    branch_protection_injection_mode: none
