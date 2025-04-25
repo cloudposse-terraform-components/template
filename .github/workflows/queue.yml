@@ -1,5 +1,5 @@
 ---
-name: chatops
+name: Queue
 on:
   pull_request:
     branches:
