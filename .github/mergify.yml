@@ -486,4 +486,4 @@ queue_rules:
     allow_inplace_checks: false
     merge_conditions:
       - and:
-          - check-success = Mergify Merge Protections
+          - check-success = test/terratest
