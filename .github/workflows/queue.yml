@@ -88,19 +88,6 @@ jobs:
         contains(steps.pr.outputs.labels, 'terraform-cloudflare-provider') || 
         contains(steps.properties.outputs.providers, 'cloudflare') }}
 
-  ack:
-    if: startsWith(github.head_ref, 'mergify/merge-queue/')
-    needs: [context]
-    runs-on: ["ubuntu-latest"]
-    steps:
-      - name: "Add reaction"
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          repository: ${{ needs.context.outputs.base_repo_owner }}/${{ needs.context.outputs.base_repo_name }}
-          comment-id: ${{ github.event.comment.id }}
-          token: ${{ github.token }}
-          reactions: '+1'
-
   pending:
     needs: [context]
     runs-on: ["ubuntu-latest"]
