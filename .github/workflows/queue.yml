@@ -88,9 +88,8 @@ jobs:
         contains(steps.pr.outputs.labels, 'terraform-cloudflare-provider') || 
         contains(steps.properties.outputs.providers, 'cloudflare') }}
 
-
   ack:
-    if: github.event.comment.id != ''
+    if: startsWith(github.head_ref, 'mergify/merge-queue/')
     needs: [context]
     runs-on: ["ubuntu-latest"]
     steps:
@@ -597,7 +596,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
   cleanup:
-    if: ${{ always() }}
+    if: ${{ always() && startsWith(github.head_ref, 'mergify/merge-queue/') }}
     runs-on: ["ubuntu-latest"]
     environment: terratest
     needs: [context, terratest]
