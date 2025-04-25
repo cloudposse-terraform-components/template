@@ -477,7 +477,7 @@ merge_protections:
 queue_rules:
   - batch_size: 10
     batch_max_wait_time: 5 m
-    checks_timeout: 5 m
+    checks_timeout: 5 h
     batch_max_failure_resolution_attempts: 3
     merge_method: squash
     update_method: rebase
