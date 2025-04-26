@@ -16,7 +16,7 @@ permissions:
 jobs:
   test:
     if: startsWith(github.head_ref, 'mergify/merge-queue/')
-    uses: ./.github/workflows/terratest.yml
+    uses: ./.github/workflows/terratest.yaml
     with:
       pr_number: ${{ github.event.pull_request.number }}
       runs-on: '["ubuntu-latest"]'
