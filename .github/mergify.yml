@@ -481,7 +481,7 @@ queue_rules:
     batch_max_failure_resolution_attempts: 3
     merge_method: squash
     update_method: rebase
-    name: Test
+    name: Default
     branch_protection_injection_mode: queue
     allow_inplace_checks: false
     merge_conditions:
