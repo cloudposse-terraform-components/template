@@ -21,5 +21,6 @@ permissions:
 
 jobs:
   component:
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terraform-component.yml@main
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terraform-component.yml@merge-queue
     secrets: inherit
+    
