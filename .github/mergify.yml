@@ -93,7 +93,7 @@ shared:
         - "#check-pending=0"
         - and:
           - "#check-pending<=2"
-          - "check-pending~=(test/terratest)"
+          - "check-pending=test/terratest"
 
   # Only for terraform files
   require_terraform_checks_are_passing: &require_terraform_checks_are_passing
