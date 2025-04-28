@@ -220,15 +220,15 @@ pull_request_rules:
           - "no-release"
           - "skip-changelog"
 
-  - name: "Add approved PR to merge queue"
-    conditions:
-      - and: *is_open
-      - and: *not_in_conflict
-      - and: *not_wip
-      - and: *is_approved
-      - and: *checks_are_passing
-    actions:
-      queue:
+  # - name: "Add approved PR to merge queue"
+  #   conditions:
+  #     - and: *is_open
+  #     - and: *not_in_conflict
+  #     - and: *not_wip
+  #     - and: *is_approved
+  #     - and: *checks_are_passing
+  #   actions:
+  #     queue:
 
   - name: "label automated pull requests"
     conditions:
