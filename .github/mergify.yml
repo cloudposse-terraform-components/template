@@ -88,8 +88,12 @@ shared:
   # Checks are passing
   checks_are_passing: &checks_are_passing
     - and:
-      - "#check-pending=0"
       - "#status-failure=0"
+      - or:
+        - "#check-pending=0"
+        - and:
+          - "#check-pending=1"
+          - "status-pending=test/terratest"
 
   # Only for terraform files
   require_terraform_checks_are_passing: &require_terraform_checks_are_passing
