@@ -1,4 +1,3 @@
-
 # These are YAML anchor definitions to avoid repetition and make the file more readable
 shared:
   # Automated pull requests from bot users
@@ -112,18 +111,22 @@ shared:
     - and:
       - "files~=\\.tf$"
 
+  # Has changes to tests
   is_tests: &is_tests
-    - and:
-      - "files~=test/.*$"  
+    and:
+      - "files~=test/.*$"
 
+  # Has changes to go deps
   is_go_deps: &is_go_deps
-    - and:
+    and:
       - "files~=test/(go\\.mod|go\\.sum)$"
 
+  # Has changes to components vendor
   is_components_vendor: &is_components_vendor
-    - and:
+    and:
       - "files~=(vendor\\.ya?ml|component\\.ya?ml)$"
 
+  # 
   is_github_config: &is_github_config
     - and:
       - "files~=\\.github/.*$"
@@ -134,7 +137,7 @@ shared:
 
   is_scaffold: &is_scaffold
     - and:
-        - "files~=(\\.tflint\\.hcl)$"
+      - "files~=(\\.tflint\\.hcl)$"
 
   # It's not closed or merged
   is_open: &is_open
