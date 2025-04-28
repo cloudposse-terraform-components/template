@@ -83,6 +83,7 @@ shared:
       - '#changes-requested-reviews-by=0'
       - "#review-threads-unresolved=0"
       - "#commented-reviews-by=0"
+      - "branch-protection-review-decision=APPROVED"
 
   # Checks are passing
   checks_are_passing: &checks_are_passing
@@ -113,17 +114,17 @@ shared:
 
   # Has changes to tests
   is_tests: &is_tests
-    and:
+    - and:
       - "files~=test/.*$"
 
   # Has changes to go deps
   is_go_deps: &is_go_deps
-    and:
+    - and:
       - "files~=test/(go\\.mod|go\\.sum)$"
 
   # Has changes to components vendor
   is_components_vendor: &is_components_vendor
-    and:
+    - and:
       - "files~=(vendor\\.ya?ml|component\\.ya?ml)$"
 
   # Has changes to .github configuration files
@@ -138,7 +139,7 @@ shared:
 
   # Has changes to tflint config
   is_scaffold: &is_scaffold
-    and:
+    - and:
       - "files~=\\.tflint\\.hcl$"
 
   # It's not closed or merged
@@ -180,7 +181,7 @@ shared:
 
 # All the rules for the Pull Request
 pull_request_rules:
-  - name: "Auto process go deps updates"
+  - name: "Auto approve auto updates PRs"
     conditions:
       - and: *is_open
       - and: *is_a_bot
@@ -188,17 +189,42 @@ pull_request_rules:
       - and: *not_wip
       - and: 
         - or:
-          - *is_go_deps
-          - *is_scaffold
-          - *is_components_vendor
-          - *is_tests
+          - and: *is_go_deps
+          - and: *is_scaffold
+          - and: *is_components_vendor
+          - and: *is_tests
+          - and: *is_github_config          
+          - and: *is_component
+    actions:
+      review:
+        type: APPROVE
+
+  - name: "Set no-release and skip-changelog labels for auto updates"
+    conditions:
+      - and: *is_open
+      - and: *is_a_bot
+      - and: 
+        - or:
+          - and: *is_go_deps
+          - and: *is_scaffold
+          - and: *is_components_vendor
+          - and: *is_tests
+          - and: *is_github_config
     actions:
       label:
         add:
           - "no-release"
           - "skip-changelog"
-      queue:
 
+  - name: "Add approved PR to merge queue"
+    conditions:
+      - and: *is_open
+      - and: *not_in_conflict
+      - and: *not_wip
+      - and: *is_approved
+      - and: *checks_are_passing
+    actions:
+      queue:
 
   - name: "label automated pull requests"
     conditions:
@@ -549,7 +575,7 @@ merge_protections:
     if:
       - base = main
     success_conditions:
-      - branch-protection-review-decision=APPROVED
+      - and: *is_approved
 
 queue_rules:
   - name: Default
