@@ -4,8 +4,6 @@ shared:
   # Automated pull requests from bot users
   is_a_bot: &is_a_bot
     - or:
-      - "author=cloudpossebot"
-      - "author=github-actions[bot]"
       - "author=dependabot[bot]"
       - "author=renovate[bot]"
       - "author=cloudposse-releaser[bot]"
@@ -13,8 +11,6 @@ shared:
   # Not a bot user
   not_a_bot: &not_a_bot
     - and:
-      - "-author=cloudpossebot"
-      - "-author=github-actions[bot]"
       - "-author=dependabot[bot]"
       - "-author=renovate[bot]"
       - "-author=cloudposse-releaser[bot]"
@@ -120,6 +116,26 @@ shared:
     - and:
       - "files~=test/.*$"  
 
+  is_go_deps: &is_go_deps
+    - and:
+      - "files~=test/(go\\.mod|go\\.sum)$"
+
+  is_components_vendor: &is_components_vendor
+    - and:
+      - "files~=(vendor\\.ya?ml|component\\.ya?ml)$"
+
+  is_github_config: &is_github_config
+    - and:
+      - "files~=\\.github/.*$"
+
+  is_component: &is_component
+    - and:
+      - "files~=src/.*$"
+
+  is_scaffold: &is_scaffold
+    - and:
+        - "files~=(\\.tflint\\.hcl)$"
+
   # It's not closed or merged
   is_open: &is_open
     - and:
@@ -159,6 +175,26 @@ shared:
 
 # All the rules for the Pull Request
 pull_request_rules:
+  - name: "Auto process go deps updates"
+    conditions:
+      - and: *is_open
+      - and: *is_a_bot
+      - and: *not_in_conflict
+      - and: *not_wip
+      - and: 
+        - or:
+          - *is_go_deps
+          - *is_scaffold
+          - *is_components_vendor
+          - *is_tests
+    actions:
+      label:
+        add:
+          - "no-release"
+          - "skip-changelog"
+      queue:
+
+
   - name: "label automated pull requests"
     conditions:
       - and: *is_a_bot
@@ -186,31 +222,6 @@ pull_request_rules:
       label:
         remove:
           - "needs-re-run"
-
-  - name: "run terratest on automated pull requests that update terraform files"
-    conditions:
-      - and: *is_open
-      - and: *is_a_bot
-      - and: *not_in_conflict
-      - and: *not_wip
-    actions:
-      comment:
-        message: "/terratest"
-
-  - name: "add no-release for go deps updates"
-    conditions:
-      - and: *is_open
-      - and: *is_a_bot
-      - and: *not_in_conflict
-      - and: *not_wip
-      - and: 
-        - "files~=test/(go\\.mod|go\\.sum)$"
-        - "head~=dependabot/.*"
-        - "title~=chore\\(deps\\):\\sbump.*\\sin\\s\\/test$"
-    actions:
-      label:
-        add:
-          - "no-release"
 
   - name: "approve automated PRs that only update the markdown files, images or videos"
     conditions:
@@ -252,48 +263,21 @@ pull_request_rules:
         toggle:
           - conflict
 
-  #- name: "ask to not edit the readme"
-  #  conditions:
-  #    - and: *is_open
-  #    - files=README.md
-  #    - -files=README.yaml
-  #  actions:
-  #    comment:
-  #      message: |
-  #        > [!IMPORTANT]
-  #        > Do not edit the `README.md` directly. It's auto-generated from the `README.yaml`
-  #        >
-  #
-  #        Rebuild the `README.md` by running `make readme` and commit the changes.
-  #
-  #        ```shell
-  #        make init
-  #        make readme
-  #        ```
-  #
-  #        Could you fix it @{{author}}? 🙏
-
-  - name: "ask to rebuild readme"
+  - name: "ask to not edit the readme"
     conditions:
-      - and: *is_default_branch
       - and: *is_open
-      - files=README.yaml
-      - -files=README.md
+      - files=README.md
+      - -files=README.yaml
     actions:
       comment:
         message: |
-          > [!IMPORTANT]
-          > `README.md` is out of date.
-          >
+         > [!IMPORTANT]
+         > Do not edit the `README.md` directly. It's auto-generated from the `README.yaml`
+         >
+         > Please update the `README.yaml` file instead.
+         >
 
-          Rebuild the `README.md` by running `make readme` and commit the changes.
-
-          ```shell
-          make init
-          make readme
-          ```
-
-          Could you fix it @{{author}}? 🙏
+         Could you fix it @{{author}}? 🙏
 
   - name: "ask for title"
     conditions:
@@ -374,7 +358,7 @@ pull_request_rules:
     actions:
       close:
         message: |
-          🚪 We're going close this pull request as it is now stale. Feel free to reopen it if you think it's a mistake.
+          🚪 We're going to close this pull request as it is now stale. Feel free to reopen it if you think it's a mistake.
 
   - name: label stale pull request after 30 days
     conditions:
@@ -405,7 +389,7 @@ pull_request_rules:
       close:
         message: |
           📬 We haven't heard back from you, so we're closing this pull request.
-          Feel free to reopen it if you think it's a mistake.
+          Feel free to reopen it.f you think it's a mistake.
 
   - name: close pull request marked as invalid, duplicate or won't fix
     conditions:
