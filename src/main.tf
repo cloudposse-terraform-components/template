@@ -1,3 +1,5 @@
 locals {
-  enabled =        module.this.enabled
+  enabled = module.this.enabled
 }
+
+
