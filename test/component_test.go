@@ -14,6 +14,8 @@ type ComponentSuite struct {
 
 
 
+
+
 func (s *ComponentSuite) TestBasic() {
 	const component = "example/basic"
 	const stack = "default-test"
