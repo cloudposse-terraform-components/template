@@ -88,12 +88,8 @@ shared:
   # Checks are passing
   checks_are_passing: &checks_are_passing
     - and:
-      - "#status-failure=0"
-      - or:
         - "#check-pending=0"
-        - and:
-          - "#check-pending<=2"
-          - "check-pending=test/terratest"
+        - "#status-failure=0"
 
   # Only for terraform files
   require_terraform_checks_are_passing: &require_terraform_checks_are_passing
@@ -226,7 +222,9 @@ pull_request_rules:
       - and: *not_in_conflict
       - and: *not_wip
       - and: *is_approved
-      - and: *checks_are_passing
+      - and:
+        - "#check-failed=0"
+        - "check-pending~=Branch\\/.*$"
     actions:
       queue:
 
