@@ -179,6 +179,9 @@ shared:
   needs_rerun: &needs_rerun
     "label~=needs-re-run"
 
+  all_commits_verified: &all_commits_verified
+    "#commits-unverified=0"
+
 # All the rules for the Pull Request
 pull_request_rules:
   - name: "Auto approve auto updates PRs"
@@ -190,6 +193,7 @@ pull_request_rules:
       - *not_in_conflict
       - *not_wip
       - *checks_are_passing
+      - *all_commits_verified
       - or:
         - *is_go_deps
         - *is_scaffold
