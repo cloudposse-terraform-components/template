@@ -87,7 +87,7 @@ shared:
   # Checks are passing
   checks_are_passing: &checks_are_passing
     - and:
-        - "#check-pending=0"
+        - "-check-pending~=Branch\\/.*$"
         - "#status-failure=0"
 
   # Only for terraform files
@@ -221,9 +221,7 @@ pull_request_rules:
       - and: *not_in_conflict
       - and: *not_wip
       - and: *is_approved
-      - and:
-        - "#check-failure=0"
-        - "-check-pending~=Branch\\/.*$"
+      - and: *checks_are_passing 
     actions:
       queue:
 
@@ -577,6 +575,7 @@ merge_protections:
       - base = main
     success_conditions:
       - and: *is_approved
+      - and: *checks_are_passing
 
 queue_rules:
   - name: Default
