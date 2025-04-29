@@ -248,7 +248,6 @@ pull_request_rules:
         - and:
           - and: *is_internal_contributor
           - and: *not_in_conflict
-          - and: *not_wip
           - and: *checks_are_passing
     actions:
       request_reviews:
