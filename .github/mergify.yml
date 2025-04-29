@@ -3,6 +3,7 @@ shared:
   # Automated pull requests from bot users
   is_a_bot: &is_a_bot
     - or:
+      - "author=cloudpossebot"
       - "author=dependabot[bot]"
       - "author=renovate[bot]"
       - "author=cloudposse-releaser[bot]"
@@ -88,7 +89,7 @@ shared:
   checks_are_passing: &checks_are_passing
     - and:
         - "-check-pending~=Branch\\/.*$"
-        - "-check-failure~=Branch\\/.*$"        
+        - "#status-failure=0"
 
   # Only for terraform files
   require_terraform_checks_are_passing: &require_terraform_checks_are_passing
