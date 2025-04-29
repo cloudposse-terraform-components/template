@@ -238,48 +238,21 @@ pull_request_rules:
     actions:
       queue:
 
-  - name: "Request approval for PRs from internal contributors"
+  - name: "Request approval for PRs"
     conditions:
-      - and: *is_open
-      - and: *is_internal_contributor
-      - and: *not_in_conflict
-      - and: *not_wip
-      - and: *checks_are_passing
+      - and: *is_open    
+      - or:
+        - and: *is_external_contributor
+        - and:
+          - and: *is_internal_contributor
+          - and: *not_in_conflict
+          - and: *not_wip
+          - and: *checks_are_passing
     actions:
       request_reviews:
         teams:
           - "@contributors"
           - "@approvers"
-
-  - name: "Request approval for PRs from external contributors"
-    conditions:
-      - and: *is_open
-      - and: *is_external_contributor
-    actions:
-      request_reviews:
-        teams:
-          - "@contributors"
-          - "@approvers"
-
-
-  - name: "Auto approve auto updates PRs"
-    conditions:
-      - and: *is_open
-      - and: *not_a_bot
-      - and: *not_in_conflict
-      - and: *not_wip
-      - and: *checks_are_passing
-      - and: 
-        - or:
-          - and: *is_go_deps
-          - and: *is_scaffold
-          - and: *is_components_vendor
-          - and: *is_tests
-          - and: *is_github_config          
-          - and: *is_component
-    actions:
-      review:
-        type: APPROVE
 
   - name: "label automated pull requests"
     conditions:
