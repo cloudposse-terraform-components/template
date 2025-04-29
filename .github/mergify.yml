@@ -571,6 +571,18 @@ merge_protections:
       - *checks_are_passing
 
 queue_rules:
+  - name: Auto Updates
+    batch_size: 10
+    batch_max_wait_time: 5 m
+    checks_timeout: 5 h
+    batch_max_failure_resolution_attempts: 3
+    merge_method: squash
+    update_method: rebase
+    branch_protection_injection_mode: queue
+    allow_inplace_checks: false
+    merge_conditions:
+      - check-success = test/terratest
+
   - name: Default
     batch_size: 10
     batch_max_wait_time: 5 m
