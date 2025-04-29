@@ -18,13 +18,15 @@ shared:
   # Contribution is from an internal contributor, part of the organization
   is_internal_contributor: &is_internal_contributor
     - and:
-      - "author=@engineering"
-      - "author=@contributors"
-      - "author=@admins"
-      - "author=@bots"
-      - "author=@approvers"
-      - "author=@security"
       - and: *not_a_bot
+      - or:
+        - "author=@engineering"
+        - "author=@contributors"
+        - "author=@admins"
+        - "author=@bots"
+        - "author=@approvers"
+        - "author=@security"
+
 
   # Contribution is from an external contributor, not part of the organization
   is_external_contributor: &is_external_contributor
@@ -100,7 +102,7 @@ shared:
   checks_are_passing: &checks_are_passing
     - and:
         - "-check-pending~=Branch\\/.*$"
-        - "-check-failure~=Branch\\/.*$"        
+        - "-check-failure~=Branch\\/.*$"   
 
   # Only for terraform files
   require_terraform_checks_are_passing: &require_terraform_checks_are_passing
@@ -198,7 +200,7 @@ pull_request_rules:
       - and: *is_a_bot
       - and: *not_in_conflict
       - and: *not_wip
-      - and: *checks_are_passing      
+      - and: *checks_are_passing
       - and: 
         - or:
           - and: *is_go_deps
