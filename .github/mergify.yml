@@ -587,8 +587,9 @@ queue_rules:
     allow_inplace_checks: false
     queue_conditions:
       - and:
-          - approved-reviews-by = mergify[bot]    
+          - approved-reviews-by = mergify[bot]
     merge_conditions:
+      - "-label=mocked-tests"
       - check-success = test/terratest
 
   - name: Default
