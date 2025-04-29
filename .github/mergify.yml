@@ -3,6 +3,7 @@ shared:
   # Automated pull requests from bot users
   is_a_bot: &is_a_bot
     - or:
+      - "author=cloudpossebot"
       - "author=dependabot[bot]"
       - "author=renovate[bot]"
       - "author=cloudposse-releaser[bot]"
