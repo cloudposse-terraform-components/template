@@ -82,7 +82,6 @@ shared:
       - '#approved-reviews-by>=1'
       - '#changes-requested-reviews-by=0'
       - "#review-threads-unresolved=0"
-      - "#commented-reviews-by=0"
       - "branch-protection-review-decision=APPROVED"
 
   # Checks are passing
