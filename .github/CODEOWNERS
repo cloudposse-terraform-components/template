@@ -3,7 +3,8 @@
 #
 # Order is important: the last matching pattern has the highest precedence
 
-# Protect .github directory except banner.png to only admins
+-# Protect .github directory except banner.png to only admins
++# Protect .github directory (except banner.png) to admins and security
 .github/workflows/ @cloudposse-terraform-components/admins @cloudposse-terraform-components/security
 .github/CODEOWNERS @cloudposse-terraform-components/admins @cloudposse-terraform-components/security
 .github/*.yaml @cloudposse-terraform-components/admins @cloudposse-terraform-components/security
