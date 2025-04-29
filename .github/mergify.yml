@@ -589,7 +589,6 @@ queue_rules:
       - and:
           - approved-reviews-by = mergify[bot]
     merge_conditions:
-      - "-label=mocked-tests"
       - check-success = test/terratest
 
   - name: Default
