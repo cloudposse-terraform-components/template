@@ -94,9 +94,8 @@ shared:
       - '#approved-reviews-by>=1'
       - '#changes-requested-reviews-by=0'
       - "#review-threads-unresolved=0"
-      - or:
-        - "branch-protection-review-decision=APPROVED"
-        - "branch-protection-review-decision=null"
+      - "-branch-protection-review-decision=review-required"
+      - "-branch-protection-review-decision=changes-requested"
 
   # Has not been approved
   not_approved: &not_approved
