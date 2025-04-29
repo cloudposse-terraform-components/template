@@ -3,8 +3,13 @@
 #
 # Order is important: the last matching pattern has the highest precedence
 
-# These owners will be the default owners for everything
-* @cloudposse-terraform-components/engineering @cloudposse-terraform-components/admins
+-# Protect .github directory except banner.png to only admins
++# Protect .github directory (except banner.png) to admins and security
+.github/workflows/ @cloudposse-terraform-components/admins @cloudposse-terraform-components/security
+.github/CODEOWNERS @cloudposse-terraform-components/admins @cloudposse-terraform-components/security
+.github/*.yaml @cloudposse-terraform-components/admins @cloudposse-terraform-components/security
+.github/*.yml @cloudposse-terraform-components/admins @cloudposse-terraform-components/security
+.github/*.json @cloudposse-terraform-components/admins @cloudposse-terraform-components/security
+.pre-commit-config.yaml @cloudposse-terraform-components/security
+Makefile @cloudposse-terraform-components/security
 
-# Protect .github directory to only admins
-.github/* @cloudposse-terraform-components/admins
