@@ -223,7 +223,7 @@ pull_request_rules:
       - and: *not_wip
       - and: *is_approved
       - and:
-        - "#check-failed=0"
+        - "#check-failure=0"
         - "check-pending~=Branch\\/.*$"
     actions:
       queue:
