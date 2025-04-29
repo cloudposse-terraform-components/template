@@ -186,8 +186,7 @@ shared:
 pull_request_rules:
   - name: "Auto approve auto updates PRs"
     conditions:
-      - "schedule = 20:00-21:00"
-      # - "schedule = 08:00-09:00"
+      - "schedule = 08:00-09:00"
       - *is_open
       - *is_a_bot
       - *not_in_conflict
@@ -588,7 +587,7 @@ queue_rules:
     allow_inplace_checks: false
     queue_conditions:
       - and:
-          - approved-reviews-by = mergify[bot]    
+          - approved-reviews-by = mergify[bot]
     merge_conditions:
       - check-success = test/terratest
 
