@@ -224,7 +224,7 @@ pull_request_rules:
       - and: *is_approved
       - and:
         - "#check-failure=0"
-        - "check-pending~=Branch\\/.*$"
+        - "-check-pending~=Branch\\/.*$"
     actions:
       queue:
 
