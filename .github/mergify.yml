@@ -14,7 +14,18 @@ shared:
       - "-author=dependabot[bot]"
       - "-author=renovate[bot]"
       - "-author=cloudposse-releaser[bot]"
-      
+
+  # Contribution is from an internal contributor, part of the organization
+  is_internal_contributor: &is_internal_contributor
+    - and:
+      - "author=@engineering"
+      - "author=@contributors"
+      - "author=@admins"
+      - "author=@bots"
+      - "author=@approvers"
+      - "author=@security"
+      - and: *not_a_bot
+
   # Contribution is from an external contributor, not part of the organization
   is_external_contributor: &is_external_contributor
     - and:
@@ -187,6 +198,7 @@ pull_request_rules:
       - and: *is_a_bot
       - and: *not_in_conflict
       - and: *not_wip
+      - and: *checks_are_passing      
       - and: 
         - or:
           - and: *is_go_deps
@@ -226,6 +238,49 @@ pull_request_rules:
     actions:
       queue:
 
+  - name: "Request approval for PRs from internal contributors"
+    conditions:
+      - and: *is_open
+      - and: *is_internal_contributor
+      - and: *not_in_conflict
+      - and: *not_wip
+      - and: *checks_are_passing
+    actions:
+      request_reviews:
+        teams:
+          - "@contributors"
+          - "@approvers"
+
+  - name: "Request approval for PRs from external contributors"
+    conditions:
+      - and: *is_open
+      - and: *is_external_contributor
+    actions:
+      request_reviews:
+        teams:
+          - "@contributors"
+          - "@approvers"
+
+
+  - name: "Auto approve auto updates PRs"
+    conditions:
+      - and: *is_open
+      - and: *not_a_bot
+      - and: *not_in_conflict
+      - and: *not_wip
+      - and: *checks_are_passing
+      - and: 
+        - or:
+          - and: *is_go_deps
+          - and: *is_scaffold
+          - and: *is_components_vendor
+          - and: *is_tests
+          - and: *is_github_config          
+          - and: *is_component
+    actions:
+      review:
+        type: APPROVE
+
   - name: "label automated pull requests"
     conditions:
       - and: *is_a_bot
@@ -253,29 +308,6 @@ pull_request_rules:
       label:
         remove:
           - "needs-re-run"
-
-  - name: "approve automated PRs that only update the markdown files, images or videos"
-    conditions:
-      - and: *is_open
-      - and: *is_default_branch
-      - and: *is_a_bot
-      - "head~=auto-update/.*"
-      - "files~=\\.(md|gif|png|jpg|mp4)$"
-    actions:
-      review:
-        type: APPROVE
-
-  - name: "merge automated PRs that only update the markdown files, images or videos"
-    conditions:
-      - and: *is_open
-      - and: *is_default_branch
-      - and: *is_a_bot
-      - "#check-pending=0"
-      - "head~=auto-update/.*"
-      - "files~=\\.(md|gif|png|jpg|mp4)$"
-    actions:
-      merge:
-        method: "squash"
 
   - name: "delete the head branch after merge"
     conditions:
