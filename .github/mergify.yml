@@ -186,7 +186,7 @@ shared:
 pull_request_rules:
   - name: "Auto approve auto updates PRs"
     conditions:
-      - "schedule = 08:00-09:00"
+      - "schedule = 21:00-22:00"
       - *is_open
       - *is_a_bot
       - *not_in_conflict
