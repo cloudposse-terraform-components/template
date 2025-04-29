@@ -88,7 +88,7 @@ shared:
   checks_are_passing: &checks_are_passing
     - and:
         - "-check-pending~=Branch\\/.*$"
-        - "#status-failure=0"
+        - "-check-failure~=Branch\\/.*$"        
 
   # Only for terraform files
   require_terraform_checks_are_passing: &require_terraform_checks_are_passing
