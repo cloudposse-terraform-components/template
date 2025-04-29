@@ -597,3 +597,9 @@ queue_rules:
     allow_inplace_checks: false
     merge_conditions:
       - check-success = test/terratest
+
+priority_rules:
+  - name: priority for queue `Auto Updates`
+    conditions:
+      - queue-name=Auto Updates
+    priority: 2250
