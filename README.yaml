@@ -5,7 +5,7 @@ github_repo: "cloudposse-terraform-components/template"
 
 # Short description of this project
 description: |-
-  Description of this component
+  Description of this component 22
 
 usage: |-
   **Stack Level**: Regional or Global
@@ -66,12 +66,6 @@ related:
 - name: "Atmos"
   description: "Atmos is like docker-compose but for your infrastructure"
   url: "https://atmos.tools"
-
-
-
-
-
-
 
 contributors: [] # If included generates contribs
 
