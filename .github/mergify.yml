@@ -38,10 +38,8 @@ shared:
 
   # Not a bot user
   not_a_bot: &not_a_bot
-    and:
-      - "-author=dependabot[bot]"
-      - "-author=renovate[bot]"
-      - "-author=cloudposse-releaser[bot]"
+    not:
+      *is_a_bot
 
   # Contribution is from an internal contributor, part of the organization
   is_internal_contributor: &is_internal_contributor
@@ -222,22 +220,46 @@ pull_request_rules:
       review:
         type: APPROVE
 
-  - name: "Set no-release and skip-changelog labels for auto updates"
+  - name: "Auto approve Readme PRs"
     conditions:
       - *is_open
-      - *is_a_bot
-      - and: 
-        - or:
-          - *is_go_deps
-          - *is_scaffold
-          - *is_components_vendor
-          - *is_tests
-          - *is_github_config
+      - *not_in_conflict
+      - *not_wip
+      - *checks_are_passing
+      - *all_commits_verified
+      - *not_approved
+      - "author=cloudposse-releaser[bot]"
+      - "files=README.md"
+      - "#files=1"
+      - "title=Update README.md and docs"
+      - "head=auto-update/readme"
     actions:
-      label:
-        add:
-          - "no-release"
-          - "skip-changelog"
+      dismiss_reviews:
+        when: "always"
+        changes_requested: 
+          - "mergify[bot]"
+        approved:
+          - "mergify[bot]"        
+        message: "Dismiss all reviews before mergify auto approve"    
+      review:
+        type: APPROVE
+
+  - name: "Auto merge Readme PRs"
+    conditions:
+      - *is_open
+      - *not_in_conflict
+      - *not_wip
+      - *checks_are_passing
+      - *all_commits_verified
+      - *is_approved
+      - "author=cloudposse-releaser[bot]"
+      - "files=README.md"
+      - "#files=1"
+      - "title=Update README.md and docs"
+      - "head=auto-update/readme"
+    actions:
+      merge:
+        method: squash
 
   - name: "Add approved PR to merge queue"
     conditions:
@@ -263,6 +285,23 @@ pull_request_rules:
         teams:
           - "@contributors"
           - "@approvers"
+
+  - name: "Set no-release and skip-changelog labels for auto updates"
+    conditions:
+      - *is_open
+      - *is_a_bot
+      - and: 
+        - or:
+          - *is_go_deps
+          - *is_scaffold
+          - *is_components_vendor
+          - *is_tests
+          - *is_github_config
+    actions:
+      label:
+        add:
+          - "no-release"
+          - "skip-changelog"
 
   - name: "label automated pull requests"
     conditions:
@@ -588,7 +627,8 @@ merge_protections:
   - name: Require terratest
     description: This rule require terratest status
     if:
-      - base = main
+      - *is_default_branch
+      - *is_release_branch
     success_conditions:
       - *is_approved
       - *checks_are_passing
