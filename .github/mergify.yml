@@ -1,5 +1,33 @@
 # These are YAML anchor definitions to avoid repetition and make the file more readable
 shared:
+  # Has changes to terraform code
+  is_terraform: &is_terraform
+    "files~=\\.tf$"
+
+  # Has changes to tests
+  is_tests: &is_tests
+    "files~=test/.*$"
+
+  # Has changes to go deps
+  is_go_deps: &is_go_deps
+    "files~=test/(go\\.mod|go\\.sum)$"
+
+  # Has changes to components vendor
+  is_components_vendor: &is_components_vendor
+    "files~=(vendor\\.ya?ml|component\\.ya?ml)$"
+
+  # Has changes to .github configuration files
+  is_github_config: &is_github_config
+    "files~=\\.github/.*$"
+
+  # Has changes to component files
+  is_component: &is_component
+    "files~=src/.*$"
+
+  # Has changes to tflint config
+  is_scaffold: &is_scaffold
+    "files~=\\.tflint\\.hcl$"
+
   # Automated pull requests from bot users
   is_a_bot: &is_a_bot
     or:
@@ -126,34 +154,6 @@ shared:
     or:
       - "-files=CODEOWNERS"
       - "check-success=validate-codeowners"
-
-  # Has changes to terraform code
-  is_terraform: &is_terraform
-    "files~=\\.tf$"
-
-  # Has changes to tests
-  is_tests: &is_tests
-    "files~=test/.*$"
-
-  # Has changes to go deps
-  is_go_deps: &is_go_deps
-    "files~=test/(go\\.mod|go\\.sum)$"
-
-  # Has changes to components vendor
-  is_components_vendor: &is_components_vendor
-    "files~=(vendor\\.ya?ml|component\\.ya?ml)$"
-
-  # Has changes to .github configuration files
-  is_github_config: &is_github_config
-    "files~=\\.github/.*$"
-
-  # Has changes to component files
-  is_component: &is_component
-    "files~=src/.*$"
-
-  # Has changes to tflint config
-  is_scaffold: &is_scaffold
-    "files~=\\.tflint\\.hcl$"
 
   # It's not closed or merged
   is_open: &is_open
