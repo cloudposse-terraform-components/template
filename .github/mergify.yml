@@ -94,15 +94,17 @@ shared:
       - '#approved-reviews-by>=1'
       - '#changes-requested-reviews-by=0'
       - "#review-threads-unresolved=0"
-      - "branch-protection-review-decision=APPROVED"
+      - or:
+        - "branch-protection-review-decision=APPROVED"
+        - not:
+            and:
+              - *is_github_config
+              - *is_scaffold
 
   # Has not been approved
   not_approved: &not_approved
-    or:
-      - '#approved-reviews-by=0'
-      - '#changes-requested-reviews-by>0'
-      - "#review-threads-unresolved>0"
-      - "-branch-protection-review-decision=APPROVED"
+    not:
+      *is_approved
 
   # Checks are passing
   checks_are_passing: &checks_are_passing
