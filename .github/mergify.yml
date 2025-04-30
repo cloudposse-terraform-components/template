@@ -607,6 +607,7 @@ queue_rules:
       - and:
           - approved-reviews-by = mergify[bot]
     merge_conditions:
+      - "-label=mocked-tests"
       - check-success = test/terratest
 
   - name: Default
@@ -619,6 +620,7 @@ queue_rules:
     branch_protection_injection_mode: queue
     allow_inplace_checks: false
     merge_conditions:
+      - "-label=mocked-tests"    
       - check-success = test/terratest
 
 priority_rules:
