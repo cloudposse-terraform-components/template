@@ -297,9 +297,6 @@ pull_request_rules:
           - *is_components_vendor
           - *is_tests
           - *is_github_config
-          - and:
-            - "files=README.md"
-            - "#files=1"
     actions:
       label:
         add:
