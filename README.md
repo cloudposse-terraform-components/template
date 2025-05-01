@@ -27,7 +27,7 @@
 
 -->
 
-Description of this component 22
+Description of this component
 
 
 > [!TIP]
