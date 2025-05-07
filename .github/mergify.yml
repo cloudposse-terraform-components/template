@@ -628,8 +628,9 @@ merge_protections:
   - name: Require terratest
     description: This rule require terratest status
     if:
-      - *is_default_branch
-      - *is_release_branch
+      or:
+        - *is_default_branch
+        - *is_release_branch
     success_conditions:
       - *is_approved
       - *checks_are_passing
