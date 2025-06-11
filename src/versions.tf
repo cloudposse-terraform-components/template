@@ -3,5 +3,3 @@ terraform {
 
   required_providers {}
 }
-
-
