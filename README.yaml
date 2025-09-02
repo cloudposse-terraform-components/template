@@ -24,9 +24,6 @@ usage: |-
 
 
 
-include:
-  - "docs/terraform.md"
-
 tags:
   - terraform
   - terraform-modules
